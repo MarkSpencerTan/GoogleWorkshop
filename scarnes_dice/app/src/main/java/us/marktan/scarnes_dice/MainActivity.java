@@ -51,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
             else {
                 compOverrallScore += compTurnScore;
                 compTotalScoreView.setText("" + compOverrallScore);
+
+                // enable the buttons again
+                rollButton.setEnabled(true);
+                holdButton.setEnabled(true);
             }
         }
     };
@@ -67,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
         diceView = (ImageView) findViewById(R.id.dice);
         rollButton = (Button) findViewById(R.id.roll_btn);
         holdButton = (Button) findViewById(R.id.hold_btn);
-
-
     }
 
     @Override
@@ -88,9 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
         compOverrallScore += compTurnScore;
         compTotalScoreView.setText(""+compOverrallScore);
-
-        rollButton.setEnabled(true);
-        holdButton.setEnabled(true);
     }
 
     public int rollDice(){
@@ -114,9 +113,10 @@ public class MainActivity extends AppCompatActivity {
             userTurnScore = 0;
             holdScore(getCurrentFocus());
         }
-        else
+        else {
             userTurnScore += value;
-        userTurnScoreView.setText(""+userTurnScore);
+            userTurnScoreView.setText(""+userTurnScore);
+        }
     }
 
     // Event handler when user presses hold button
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         userOverrallScore += userTurnScore;
         userTurnScore = 0;
         userTotalScoreView.setText(""+userOverrallScore);
-        userTurnScoreView.setText(""+userTurnScore);
+        userTurnScoreView.setText("User holds");
         computerTurn();
     }
 
