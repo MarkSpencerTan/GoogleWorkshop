@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -124,9 +125,18 @@ public class AnagramsActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         EditText editText = (EditText) findViewById(R.id.editText);
         TextView resultView = (TextView) findViewById(R.id.resultView);
+        RadioButton oneLetterMode = (RadioButton) findViewById(R.id.oneLetterMode);
+        RadioButton twoLetterMode = (RadioButton) findViewById(R.id.twoLetterMode);
+
         if (currentWord == null) {
             currentWord = dictionary.pickGoodStarterWord();
-            anagrams = dictionary.getAnagramsWithOneMoreLetter(currentWord);
+
+            if(oneLetterMode.isChecked()){
+                anagrams = dictionary.getAnagramsWithOneMoreLetter(currentWord);
+            }
+            else if(twoLetterMode.isChecked()){
+                anagrams = dictionary.getAnagramsWithTwoLetters(currentWord);
+            }
             gameStatus.setText(Html.fromHtml(String.format(START_MESSAGE, currentWord.toUpperCase(), currentWord)));
             fab.setImageResource(android.R.drawable.ic_menu_help);
             fab.hide();

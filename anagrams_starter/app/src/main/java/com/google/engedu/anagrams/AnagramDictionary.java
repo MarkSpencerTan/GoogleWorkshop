@@ -97,6 +97,23 @@ public class AnagramDictionary {
         return result;
     }
 
+    public List<String> getAnagramsWithTwoLetters(String word) {
+        // an arraylist containing all the anagrams of the word + a character
+        ArrayList<String> result = new ArrayList<String>();
+
+        for(char c = 'a'; c <= 'z'; c++ ){
+            for( char c2 = c; c2 <= 'z'; c2++){
+                String sortedWord = sortLetters(word+c+c2);
+                if(lettersToWord.containsKey(sortedWord)){
+                    for(String s : lettersToWord.get(sortedWord)){
+                        result.add(s);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public String pickGoodStarterWord() {
         ArrayList<String> wordArray = sizeToWords.get(wordLength);
 
@@ -105,6 +122,39 @@ public class AnagramDictionary {
 
         String word = "";
         boolean wrappedAround = false;
+        for(int i = r; i < wordArray.size(); i++){
+            String sortedWord = sortLetters(wordArray.get(i));
+            if(lettersToWord.get(sortedWord).size() >= MIN_NUM_ANAGRAMS){
+                word = wordArray.get(i);
+                if(wordLength < MAX_WORD_LENGTH){
+                    wordLength++;
+                }
+                return word;
+            }
+            // wrap around the list
+            if (i == wordArray.size()-1){
+                i = 0;
+                wrappedAround = true;
+            }
+            // if you wrapped fully around to your initial value,
+            // increment word length and update the wordArray
+            if (i == r && wrappedAround){
+                wordLength++;
+                wordArray = sizeToWords.get(wordLength);
+            }
+        }
+        return word;
+    }
+
+    public String pickDoubleStarterWord() {
+        ArrayList<String> wordArray = sizeToWords.get(wordLength);
+
+        Random rand = new Random();
+        int r = rand.nextInt(wordArray.size());
+
+        String word = "";
+        boolean wrappedAround = false;
+
         for(int i = r; i < wordArray.size(); i++){
             String sortedWord = sortLetters(wordArray.get(i));
             if(lettersToWord.get(sortedWord).size() >= MIN_NUM_ANAGRAMS){
