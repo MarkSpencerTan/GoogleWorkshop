@@ -11,6 +11,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -46,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 compTurnScore += value;
                 compTurnScoreView.setText("" + compTurnScore);
             }
-            if(!hold && compTurnScore < 20)
+            if(!hold && (compTurnScore < 20) && (compTurnScore + compOverrallScore <= 100))
                 timerHandler.postDelayed(this, 500);
             else {
                 compOverrallScore += compTurnScore;
@@ -55,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
                 // enable the buttons again
                 rollButton.setEnabled(true);
                 holdButton.setEnabled(true);
+
+                if(checkIfEndGame()){
+                    timerHandler.removeCallbacks(timerRunnable);
+                    return;
+                }
             }
         }
     };
@@ -80,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void computerTurn(){
+        if (checkIfEndGame())
+            return;
+
         rollButton.setEnabled(false);
         holdButton.setEnabled(false);
 
@@ -140,6 +149,22 @@ public class MainActivity extends AppCompatActivity {
         compTotalScoreView.setText(""+compOverrallScore);
         compTurnScoreView.setText(""+compTurnScore);
     }
+
+    public boolean checkIfEndGame(){
+        String winner = "none";
+        if (userOverrallScore >= 100) {
+            Toast.makeText(getApplicationContext(), "YOU WIN LIFE", Toast.LENGTH_LONG).show();
+            resetGame(getCurrentFocus());
+            return true;
+        }
+        else if(compOverrallScore >= 100) {
+            Toast.makeText(getApplicationContext(), "Computer Wins, you LOSE", Toast.LENGTH_LONG).show();
+            resetGame(getCurrentFocus());
+            return true;
+        }
+        return false;
+    }
+
 
 
 }
